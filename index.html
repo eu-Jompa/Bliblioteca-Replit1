@@ -1,122 +1,121 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script type="text/javascript" src="https://npmcdn.com/parse/dist/parse.min.js"></script>
-    <link rel="stylesheet" href="style/index.css">
+    <script
+      type="text/javascript"
+      src="https://npmcdn.com/parse/dist/parse.min.js"
+    ></script>
+    <link rel="stylesheet" href="style/index.css" />
+  </head>
+  <body>
+    <h1>JS SDK</h1>
+    <input id="username" type="text" placeholder="Username" />
+    <input id="email" type="email" placeholder="Email" />
+    <input id="password" type="password" placeholder="Password" />
+    <button id="createButton">Create User</button>
 
-</head>
-<body>
-  <h1>JS SDK</h1>   
-  <input id="username" type="text" placeholder="Username"/>
-  <input id="email" type="email" placeholder="Email"/>
-  <input id="password" type="password" placeholder="Password" />
-  <button id="createButton">Create User</button>
+    <div id="results"></div>
+
+    <script>
+      Parse.initialize("foGUBluZGrJCl64t9Hz2yADSSxeSe6nwVIIpHr2x","8uRogyXapcUlSILV71Tmtp5NOg5sDa9SEoaNN3Xa"); //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
+      Parse.serverURL = 'https://parseapi.back4app.com/'
+
+      async () => {
+        const query = new Parse.Query('Livros');
+        // You can also query by using a parameter of an object
+        // query.equalTo('objectId', 'xKue915KBG');
+        const results = await query.find();
+        try {
+          for (const object of results) {
+            // Access the Parse Object attributes using the .GET method
+            const myCustomKey1Name = object.get('nomelivro');
+            const myCustomKey2Name = object.get('autorlivro');
+            console.log(myCustomKey1Name);
+            console.log(myCustomKey2Name);
+          }
+        } catch (error) {
+          console.error('Error while fetching MyCustomClassName', error);
+        }
+      }();
 
 
-  <div id="results"></div>
-  
-  
-<script>
-  Parse.initialize("foGUBluZGrJCl64t9Hz2yADSSxeSe6nwVIIpHr2x","8uRogyXapcUlSILV71Tmtp5NOg5sDa9SEoaNN3Xa"); //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
-  Parse.serverURL = 'https://parseapi.back4app.com/'
 
-  async () => {
-    const query = new Parse.Query('Livros');
-    // You can also query by using a parameter of an object
-    // query.equalTo('objectId', 'xKue915KBG');
-    const results = await query.find();
-    try {
-      for (const object of results) {
-        // Access the Parse Object attributes using the .GET method
-        const myCustomKey1Name = object.get('nomelivro');
-        const myCustomKey2Name = object.get('autorlivro');
-        console.log(myCustomKey1Name);
-        console.log(myCustomKey2Name);
+
+
+
+
+      let produtos = [];
+
+      const areaResultados = document.getElementById('results');
+
+      mostrarProdutos();
+
+      async function mostrarProdutos() {
+          areaResultados.innerHTML = "";
+          produtos = [];
+
+          const query = new Parse.Query('Livros');
+          try {
+              console.log(Parse.applicationId);
+              const resultado = await query.find();
+
+              resultado.forEach((data) => {
+            produtos.push({
+                      nome: data.get.element(`nomelivro`),
+                      descricao: data.get(`autorlivro`),
+                      preco: data.get(`preco`),
+                  });
+                  imprimir(data);
+              })
+          } catch (error) {
+              console.error('Erro ao buscar dados', error);
+          }
       }
-    } catch (error) {
-      console.error('Error while fetching MyCustomClassName', error);
-    }
-  }();
 
-
-
-
-
-
-  
-  let produtos = [];
-
-  const areaResultados = document.getElementById('results');
-
-  mostrarProdutos();
-
-  async function mostrarProdutos() {
-      areaResultados.innerHTML = "";
-      produtos = [];
-
-      const query = new Parse.Query('Livros');
-      try {
-
-          const resultado = await query.find();
-
-          resultado.forEach((data) => {
-        produtos.push({
-                  nome: data.get.element(`nomelivro`),
-                  descricao: data.get(`autorlivro`),
-                  preco: data.get(`preco`),
-              });
-              imprimir(data);
-          })
-      } catch (error) {
-          console.error('Erro ao buscar dados', error);
+      function imprimir(data) {
+          const elemento = document.createElement("div");
+          elemento.innerHTML = `
+              <p>Nome: ${data.nomelivro}</p>
+              <p>Descrição: ${data.autorlivro}</p>
+              <p>Preço: ${data.preco}</p>
+          `;
+          areaResultados.appendChild(elemento);
+          console.log(data.id);
       }
-  }
-
-  function imprimir(data) {
-      const elemento = document.createElement("div");
-      elemento.innerHTML = `
-          <p>Nome: ${data.nomelivro}</p>
-          <p>Descrição: ${data.autorlivro}</p>
-          <p>Preço: ${data.preco}</p>
-      `;
-      areaResultados.appendChild(elemento);
-      console.log(data.id);
-  }
-
-  
 
 
-  async function createParseUser() {
-    // Creates a new Parse "User" object, which is created by default in your Parse app
-    let user = new Parse.User();
-    // Set the input values to the new "User" object
-    user.set("username", document.getElementById("username").value);
-    user.set("email", document.getElementById("email").value);
-    user.set("password", document.getElementById("password").value);
-    try {
-      // Call the save method, which returns the saved object if successful
-      user = await user.save();
-      if (user !== null) {
-        // Notify the success by getting the attributes from the "User" object, by using the get method (the id attribute needs to be accessed directly, though)
-        alert(
-          `New object created with success! ObjectId: ${
-            user.id
-          }, ${user.get("username")}`
-        );
+
+
+      async function createParseUser() {
+        // Creates a new Parse "User" object, which is created by default in your Parse app
+        let user = new Parse.User();
+        // Set the input values to the new "User" object
+        user.set("username", document.getElementById("username").value);
+        user.set("email", document.getElementById("email").value);
+        user.set("password", document.getElementById("password").value);
+        try {
+          // Call the save method, which returns the saved object if successful
+          user = await user.save();
+          if (user !== null) {
+            // Notify the success by getting the attributes from the "User" object, by using the get method (the id attribute needs to be accessed directly, though)
+            alert(
+              `New object created with success! ObjectId: ${
+                user.id
+              }, ${user.get("username")}`
+            );
+          }
+        } catch (error) {
+          alert(`Error: ${error.message}`);
+        }
       }
-    } catch (error) {
-      alert(`Error: ${error.message}`);
-    }
-  }
 
-  // Add on click listener to call the create parse user function
-  document.getElementById("createButton").addEventListener("click", async function () {
-    createParseUser();
-  });
-</script>
-  
-</body>
+      // Add on click listener to call the create parse user function
+      document.getElementById("createButton").addEventListener("click", async function () {
+        createParseUser();
+      });
+    </script>
+  </body>
 </html>
