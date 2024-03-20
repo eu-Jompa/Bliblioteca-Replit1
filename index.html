@@ -40,9 +40,9 @@
 
           resultado.forEach((data) => {
         produtos.push({
-                  nome: data.get(`nomelivro`),
-                  descricao: data.get(`autorlivro`),
-                  preco: data.get(`preco`),
+                  nome: data.get.value(`nomelivro`),
+                  descricao: data.get.value(`autorlivro`),
+                  preco: data.get.value(`preco`),
               });
               imprimir(data);
           })
