@@ -23,6 +23,30 @@
   Parse.initialize("foGUBluZGrJCl64t9Hz2yADSSxeSe6nwVIIpHr2x","8uRogyXapcUlSILV71Tmtp5NOg5sDa9SEoaNN3Xa"); //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
   Parse.serverURL = 'https://parseapi.back4app.com/'
 
+  (async () => {
+    const query = new Parse.Query('Livros');
+    // You can also query by using a parameter of an object
+    // query.equalTo('objectId', 'xKue915KBG');
+    const results = await query.find();
+    try {
+      for (const object of results) {
+        // Access the Parse Object attributes using the .GET method
+        const myCustomKey1Name = object.get('nomelivro');
+        const myCustomKey2Name = object.get('autorlivro');
+        console.log(myCustomKey1Name);
+        console.log(myCustomKey2Name);
+      }
+    } catch (error) {
+      console.error('Error while fetching MyCustomClassName', error);
+    }
+  })();
+
+
+
+
+
+
+  
   let produtos = [];
 
   const areaResultados = document.getElementById('results');
