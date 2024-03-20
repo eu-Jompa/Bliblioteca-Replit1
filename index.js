@@ -7,7 +7,7 @@ Parse.initialize("foGUBluZGrJCl64t9Hz2yADSSxeSe6nwVIIpHr2x","8uRogyXapcUlSILV71T
 Parse.serverURL = 'https://parseapi.back4app.com/';
 
 app.get('/', function (req, res) {
-  res.send('Hello World')
+  res.render('index.html');
 })
 
 app.listen(3000)
