@@ -22,6 +22,47 @@
   Parse.initialize("foGUBluZGrJCl64t9Hz2yADSSxeSe6nwVIIpHr2x","8uRogyXapcUlSILV71Tmtp5NOg5sDa9SEoaNN3Xa"); //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
   Parse.serverURL = 'https://parseapi.back4app.com/'
 
+  let produtos = [];
+
+  const areaResultados = document.getElementById('results');
+
+  mostrarProdutos();
+
+  async function mostrarProdutos() {
+      areaResultados.innerHTML = "";
+      produtos = [];
+
+      const query = new Parse.Query('Livros');
+      try {
+
+          const resultado = await query.find();
+
+          resultado.forEach((data) => {
+        produtos.push({
+                  nome: data.get(`nomelivro`),
+                  descricao: data.get(`autorlivro`),
+                  preco: data.get(`preco`),
+              });
+              imprimir(data);
+          })
+      } catch (error) {
+          console.error('Erro ao buscar dados', error);
+      }
+  }
+
+  function imprimir(data) {
+      const elemento = document.createElement("div");
+      elemento.innerHTML = `
+          <p>Nome: ${data.nomelivro}</p>
+          <p>Descrição: ${data.autorlivro}</p>
+          <p>Preço: ${data.preco}</p>
+      `;
+      areaResultados.appendChild(elemento);
+      console.log(data.id);
+  }
+
+  
+
 
   async function createParseUser() {
     // Creates a new Parse "User" object, which is created by default in your Parse app
